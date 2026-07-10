@@ -1,5 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { formatGeminiErrorMessage, getGeminiModelInstance } from "@/lib/server/gemini";
+import type { Locale } from "@/i18n/config";
+
+const importLanguageByLocale: Record<Locale, string> = {
+  zh: "Chinese",
+  en: "English",
+  tl: "Filipino",
+};
 
 const parseJsonPayload = (content: string) => {
   const text = content.trim();
@@ -60,7 +67,8 @@ export const Route = createFileRoute("/api/resume-import")({
             );
           }
 
-          const language = locale === "en" ? "English" : "Chinese";
+          const language =
+            importLanguageByLocale[locale as Locale] ?? "Chinese";
           const geminiModel = model || "gemini-flash-latest";
           const imageParts = Array.isArray(images)
             ? images.map((image) => {
